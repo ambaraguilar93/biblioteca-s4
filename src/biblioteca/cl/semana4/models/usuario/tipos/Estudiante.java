@@ -4,7 +4,6 @@
  */
 package biblioteca.cl.semana4.models.usuario.tipos;
 
-import biblioteca.cl.semana4.exceptions.LibroNoEncontradoException;
 import biblioteca.cl.semana4.exceptions.LibroYaPrestadoException;
 import biblioteca.cl.semana4.models.libro.Libro;
 import biblioteca.cl.semana4.models.usuario.Usuario;
@@ -71,6 +70,9 @@ public class Estudiante extends Usuario {
             throw new LibroYaPrestadoException("No hay libros en la lista");          
         }
         
+        if (titulo == null || titulo.isEmpty()) {
+            throw new LibroYaPrestadoException("El titulo del libro no puede estar vacio.");          
+        }
         
         for (Libro libro : libros) {
             if (libro.getTitulo().equalsIgnoreCase(titulo)) {

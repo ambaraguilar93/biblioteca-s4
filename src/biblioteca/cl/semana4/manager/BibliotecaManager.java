@@ -5,10 +5,8 @@
 package biblioteca.cl.semana4.manager;
 
 import biblioteca.cl.semana4.exceptions.LibroNoEncontradoException;
-import biblioteca.cl.semana4.exceptions.LibroYaPrestadoException;
 import biblioteca.cl.semana4.models.libro.Libro;
 import biblioteca.cl.semana4.models.usuario.Usuario;
-import biblioteca.cl.semana4.models.usuario.tipos.Estudiante;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;

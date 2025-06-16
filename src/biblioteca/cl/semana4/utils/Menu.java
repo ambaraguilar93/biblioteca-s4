@@ -11,7 +11,6 @@ import biblioteca.cl.semana4.models.libro.Libro;
 import biblioteca.cl.semana4.models.usuario.Usuario;
 import biblioteca.cl.semana4.models.usuario.tipos.Administrador;
 import biblioteca.cl.semana4.models.usuario.tipos.Estudiante;
-import biblioteca.cl.semana4.utils.LibrosUtils;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
@@ -37,7 +36,7 @@ public class Menu {
         int opcion;
         do {
             System.out.println("\n===== BIBLIOTECA DUOC UC =====");
-//            System.out.println("   Usuarios registrados: " + bankManager.getCantidadClientes());
+
             System.out.println("\n===== OPCIONES GENERALES =====");
             System.out.println("1. Registrar usuario");
             System.out.println("2. Ver lista libros");
