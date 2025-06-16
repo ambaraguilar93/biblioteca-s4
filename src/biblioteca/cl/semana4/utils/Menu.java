@@ -4,11 +4,16 @@
  */
 package biblioteca.cl.semana4.utils;
 
+import biblioteca.cl.semana4.exceptions.LibroNoEncontradoException;
+import biblioteca.cl.semana4.exceptions.LibroYaPrestadoException;
 import biblioteca.cl.semana4.manager.BibliotecaManager;
+import biblioteca.cl.semana4.models.libro.Libro;
 import biblioteca.cl.semana4.models.usuario.Usuario;
 import biblioteca.cl.semana4.models.usuario.tipos.Administrador;
 import biblioteca.cl.semana4.models.usuario.tipos.Estudiante;
+import biblioteca.cl.semana4.utils.LibrosUtils;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -19,6 +24,7 @@ public class Menu {
     private Scanner scanner;
     private BibliotecaManager bibliotecaManager;
     private Usuario usuarioActivo;
+    private List<Libro> libros = LibrosUtils.obtenerLibro();
     
     
     public Menu(){
@@ -36,11 +42,14 @@ public class Menu {
             System.out.println("1. Registrar usuario");
             System.out.println("2. Ver lista libros");
             System.out.println("3. Buscar libro");
-            System.out.println("4. Pedir prestado libro");
-            System.out.println("5. Ver informacion usuario");
+            System.out.println("4. Ver informacion usuario");
+            System.out.println("\n===== OPCIONES ESTUDIANTE =====");       
+            System.out.println("5. Pedir prestado libro");
             System.out.println("\n===== OPCIONES ADMINISTRADOR =====");
             System.out.println("6. Agregar libro");    
-            System.out.println("\n=======================================");     
+            System.out.println("\n===== SIGN OUT =====");   
+            System.out.println("7. Salir"); 
+            System.out.println("\n=======================================");
             System.out.println("Seleccione una opcion: ");
             
             try {
@@ -54,19 +63,19 @@ public class Menu {
                     registrarUsuario();
                     break;
                 case 2:
-                    //listarLibros();
+                    listarLibros();
                     break;
                 case 3:
-                    //buscarLibro();
+                    buscarLibro();
                     break;
                 case 4:
-                    //pedirLibro();
-                    break;
-                case 5:
                     mostrarInformacionUsuario();
                     break;
+                case 5:
+                    pedirLibro();                  
+                    break;
                 case 6:
-                    //agregarLibro();
+                    agregarLibro();
                     break;
                 case 7:
                     System.out.println("Gracias por utilizar la app de biblioteca DUOC UC.");
@@ -130,8 +139,8 @@ public class Menu {
                     System.out.println("La edad ingresada no es valida.");
                     continue;
                 }
-            } catch (InputMismatchException e){
-                System.out.println("Ingrese una edad valida.");               
+            } catch (NumberFormatException e){
+                System.out.println("Error: tipo de dato incorrecto. Ingrese una edad valida.");               
             }
             
         }
@@ -179,7 +188,7 @@ public class Menu {
             System.out.println("Error: "+e.getMessage());
         } 
     }
-    
+   
     private void mostrarInformacionUsuario(){
         
         if (usuarioActivo == null) {
@@ -188,5 +197,75 @@ public class Menu {
         }
         
         bibliotecaManager.mostrarInformacionUsuario(usuarioActivo.getRut());
+    }
+    
+    private void listarLibros(){
+        if (usuarioActivo == null) {
+            System.out.println("Error: registrese o identifiquese.");
+            return;
+        }
+        
+        System.out.println("\n===== LISTA DE LIBROS =====");
+        for(Libro libro: libros){
+            System.out.println( (libros.indexOf(libro) + 1) + ". " + libro.mostrarInformacionLibro());
+        }
+    }
+    
+    private void buscarLibro(){
+        if (usuarioActivo == null) {
+            System.out.println("Error: registrese o identifiquese.");
+            return;
+        }
+        
+        System.out.println("Ingrese el nombre del libro que quiere buscar: ");     
+        String titulo = scanner.nextLine();
+        
+        try{
+            Libro libro = Libro.buscarLibroPorTitulo(libros, titulo);
+            System.out.println("Libro encontrado.");
+            System.out.println(libro.mostrarInformacionLibro());
+        } catch(LibroNoEncontradoException e) {
+            System.out.println("Error: " +e.getMessage());
+        }
+        
+    }
+    
+    private void pedirLibro(){
+        if (usuarioActivo == null) {
+            System.out.println("Error: registrese o identifiquese.");
+            return;
+        }
+        
+        
+        System.out.println("Ingrese el nombre del libro que quiere: ");
+        String titulo = scanner.nextLine();
+        
+        try{          
+            usuarioActivo.pedirPrestadoLibro(libros, titulo);
+        } catch(LibroYaPrestadoException e){
+            System.out.println("Error: " +e.getMessage());
+        }
+       
+    }
+    
+    private void agregarLibro() {
+        if (usuarioActivo == null) {
+            System.out.println("Error: registrese o identifiquese.");
+            return;
+        }
+        
+        
+        System.out.println("Ingrese el nombre del libro que desea agregar: ");
+        String titulo = scanner.nextLine();
+        
+        System.out.println("Ingrese el autor del Libro: ");
+        String autor = scanner.nextLine();
+        
+        try{
+            usuarioActivo.agregarLibro(libros, titulo, autor);
+        } catch(InputMismatchException e){
+             System.out.println("Error: " +e.getMessage());
+        }
+        
     }
 }

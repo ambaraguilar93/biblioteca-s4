@@ -5,7 +5,9 @@
 package biblioteca.cl.semana4.models.usuario;
 
 import biblioteca.cl.semana4.exceptions.LibroNoEncontradoException;
+import biblioteca.cl.semana4.exceptions.LibroYaPrestadoException;
 import biblioteca.cl.semana4.models.libro.Libro;
+import java.util.InputMismatchException;
 import java.util.List;
 
 /**
@@ -109,9 +111,11 @@ public abstract class Usuario {
         return "No valido.";
     }
     
-    public abstract boolean registrarUsuario();
+    public abstract void pedirPrestadoLibro(List<Libro> libros, String titulo) throws LibroYaPrestadoException;
     
-    public abstract Libro buscarLibroPorTitulo(List<Libro> libros, String titulo) throws LibroNoEncontradoException;
+    public abstract void agregarLibro(List<Libro> libros, String titulo, String autor) throws InputMismatchException;
+    
+    public abstract boolean registrarUsuario();
     
     public abstract void mostrarInformacionUsuario();
 }

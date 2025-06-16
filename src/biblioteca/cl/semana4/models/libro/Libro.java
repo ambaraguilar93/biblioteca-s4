@@ -4,6 +4,9 @@
  */
 package biblioteca.cl.semana4.models.libro;
 
+import biblioteca.cl.semana4.exceptions.LibroNoEncontradoException;
+import java.util.List;
+
 /**
  *
  * @author ambar
@@ -51,9 +54,28 @@ public class Libro {
     }
     
     public String mostrarInformacionLibro(){
-        return titulo + " | " + autor + " | " + isPrestado;
+        return titulo + " | " + autor + " | " + "Prestado: "+ isPrestado;
     }
     
-    
+    public static Libro buscarLibroPorTitulo(List<Libro> libros, String titulo) throws LibroNoEncontradoException{
+        if (libros == null || libros.isEmpty()) {
+            throw new LibroNoEncontradoException("No hay libros en la lista");
+        }
+        
+        if (titulo == null || titulo.isEmpty()) {
+            throw new LibroNoEncontradoException("El nombre del libro a buscar no puede estar vacío.");
+        }
+        
+        if (titulo.length() < 3) {
+            throw new LibroNoEncontradoException("La condición de búsqueda debe tener al menos 3 caracteres.");
+        }
+        
+        for (Libro libro : libros) {
+            if (libro.getTitulo().equalsIgnoreCase(titulo)) {
+                return libro;
+            }
+        }
+        throw new LibroNoEncontradoException("Libro llamado " + titulo + " no encontrado.");
+    }
     
 }

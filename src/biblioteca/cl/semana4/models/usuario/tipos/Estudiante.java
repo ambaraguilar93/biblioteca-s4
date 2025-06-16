@@ -8,6 +8,7 @@ import biblioteca.cl.semana4.exceptions.LibroNoEncontradoException;
 import biblioteca.cl.semana4.exceptions.LibroYaPrestadoException;
 import biblioteca.cl.semana4.models.libro.Libro;
 import biblioteca.cl.semana4.models.usuario.Usuario;
+import java.util.InputMismatchException;
 import java.util.List;
 
 /**
@@ -31,23 +32,6 @@ public class Estudiante extends Usuario {
     }
     
     //metodos de la clase
-    public void pedirPrestadoLibro(List<Libro> libros, String titulo) throws LibroYaPrestadoException{
-        
-        if (libros == null || libros.isEmpty()) {
-            throw new LibroYaPrestadoException("No hay libros en la lista");          
-        }
-        
-        for (Libro libro : libros) {
-            if (libro.getTitulo().equalsIgnoreCase(titulo)) {
-                if (libro.getIsPrestado()) {
-                    throw new LibroYaPrestadoException("El libro '" + titulo + "' ya ha sido prestado.");
-                }                     
-                libro.prestarLibro();
-                System.out.println("El libro '" + titulo + "' ha sido prestado con éxito.");
-                return;  
-            }
-        }
-    }
     
     private boolean validarRut(String rut) {
         if (rut == null || rut.isEmpty()) {
@@ -71,30 +55,6 @@ public class Estudiante extends Usuario {
             return false;
     }
 
-    @Override
-    //Estudiante puede buscar libro por nombre 
-    public Libro buscarLibroPorTitulo(List<Libro> libros, String titulo) throws LibroNoEncontradoException{
-        
-        if (libros == null || libros.isEmpty()) {
-            throw new LibroNoEncontradoException("No hay libros en la lista");
-        }
-        
-        if (this.getLibro().getTitulo() == null || this.getLibro().getTitulo().isEmpty()) {
-            throw new LibroNoEncontradoException("El nombre del libro a buscar no puede estar vacío.");
-        }
-        
-        if (this.getLibro().getTitulo().length() < 3) {
-            throw new LibroNoEncontradoException("La condición de búsqueda debe tener al menos 3 caracteres.");
-        }
-        
-        for (Libro libro : libros) {
-            if (libro.getTitulo().equalsIgnoreCase(titulo)) {
-                return libro;
-            }
-        }
-        throw new LibroNoEncontradoException("Libro llamado " + titulo + " no encontrado.");
-        
-    }
 
     @Override
     public void mostrarInformacionUsuario() {
@@ -103,6 +63,30 @@ public class Estudiante extends Usuario {
         System.out.println("Edad: " + this.getEdad());
         System.out.println("Direccion: " + this.getDireccion() );
         System.out.println("Tipo Usuario: " + this.getTipoUsuario());
+    }
+
+    @Override
+    public void pedirPrestadoLibro(List<Libro> libros, String titulo) throws LibroYaPrestadoException{
+        if (libros == null || libros.isEmpty()) {
+            throw new LibroYaPrestadoException("No hay libros en la lista");          
+        }
+        
+        
+        for (Libro libro : libros) {
+            if (libro.getTitulo().equalsIgnoreCase(titulo)) {
+                if (libro.getIsPrestado()) {
+                    throw new LibroYaPrestadoException("El libro '" + titulo + "' ya ha sido prestado.");
+                }                     
+                libro.prestarLibro();
+                System.out.println("El libro '" + titulo + "' ha sido prestado con éxito.");
+                return;  
+            }
+        }
+    }
+
+    @Override
+    public void agregarLibro(List<Libro> libros, String titulo, String autor) throws InputMismatchException {
+        throw new InputMismatchException("Este usuario no puede agregar libros."); 
     }
     
     
